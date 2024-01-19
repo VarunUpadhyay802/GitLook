@@ -1,0 +1,71 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.user-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.user-image {
+  flex: 0 0 150px;
+  margin-right: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 30%;
+}
+
+.user-image img {
+  width: 100%;
+  height: auto;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.repositories {
+  margin-top: 20px;
+}
+
+.repo-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.repo-card-header {
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
+.repo-card-body {
+  padding: 15px;
+}
+
+@media (max-width: 768px) {
+  .user-details {
+    flex-direction: column;
+  }
+
+  .user-image {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+}
