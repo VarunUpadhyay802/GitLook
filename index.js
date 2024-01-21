@@ -19,7 +19,7 @@
 //     fetch(GITHUB_API_USERINFO + userName)
 //         .then(response => response.json())
 //         .then(data => {
-            
+
 //             loading.style.display = "none"
 //             resultDiv.style.display = "block";
 //             resultDiv.style.display = "block";
@@ -72,6 +72,7 @@
 
 //     e.preventDefault();
 // });
+
 const GITHUB_API_USERINFO = "https://api.github.com/users/";
 
 const full_name = document.getElementById("full_name");
@@ -86,6 +87,10 @@ const resultDiv = document.getElementById("resultDiv");
 const repositoriesContainer = document.getElementById("repositoriesContainer");
 const need_to_search = document.getElementById("need_to_search");
 const loading = document.getElementById("loading");
+const paginationContainer = document.querySelector(".pagination");
+
+const reposPerPage = 10;
+let currentPage = 1;
 
 searchButton.addEventListener("click", (e) => {
     const searchValue = searchInput.value;
@@ -109,56 +114,90 @@ searchButton.addEventListener("click", (e) => {
             github_link.href = data.html_url;
 
             // Fetch user repositories with pagination
-            fetchRepositories(userName);
+            fetchRepositories(userName, currentPage);
         })
         .catch(error => console.error("Error:", error));
 
     e.preventDefault();
 });
 
+function updatePaginationLinks(linkHeader) {
+    paginationContainer.innerHTML = ""; // Clear existing pagination links
+
+    const links = parseLinkHeader(linkHeader);
+
+    // Create and append pagination links
+    links.forEach(link => {
+        const pageLink = document.createElement("a");
+        pageLink.href = "#";
+        pageLink.textContent = link.page;
+        if (link.active) {
+            pageLink.classList.add("active");
+        }
+
+        pageLink.addEventListener("click", () => {
+            currentPage = link.page;
+            fetchRepositories(searchInput.value, currentPage);
+        });
+
+        paginationContainer.appendChild(pageLink);
+    });
+}
+
+function parseLinkHeader(linkHeader) {
+    if (!linkHeader) {
+        return [];
+    }
+
+    const links = linkHeader.split(", ");
+    const result = [];
+
+    links.forEach(link => {
+        const [url, rel] = link.split("; ");
+        const pageMatch = url.match(/page=(\d+)/);
+        const page = pageMatch ? parseInt(pageMatch[1]) : null;
+        const active = rel.includes("rel=\"next\"") || rel.includes("rel=\"prev\"") ? false : true;
+
+        result.push({ page, active });
+    });
+
+    return result;
+}
 function fetchRepositories(userName, page = 1) {
-    fetch(`${GITHUB_API_USERINFO}${userName}/repos?page=${page}&per_page=10`)
+    fetch(`${GITHUB_API_USERINFO}${userName}/repos?page=${page}&per_page=${reposPerPage}`)
         .then(response => {
             const linkHeader = response.headers.get('link');
-            const hasNextPage = linkHeader && linkHeader.includes('rel="next"');
+            updatePaginationLinks(linkHeader);
 
-            return response.json().then(repositories => ({ repositories, hasNextPage }));
+            return response.json();
         })
-        .then(({ repositories, hasNextPage }) => {
-            // Clear existing repositories in the container
-            repositoriesContainer.innerHTML = "";
+        .then(repositories => {
+            repositoriesContainer.innerHTML = ""; // Clear existing repositories in the container
 
-            // Iterate over each repository and append to the container
-           // Iterate over each repository and append to the container
-repositories.forEach(repository => {
-    const repoCard = document.createElement("div");
-    repoCard.className = "repo-card";
+            repositories.forEach(repository => {
+                const repoCard = document.createElement("div");
+                repoCard.className = "repo-card";
 
-    const repoCardHeader = document.createElement("div");
-    repoCardHeader.className = "repo-card-header";
+                const repoCardHeader = document.createElement("div");
+                repoCardHeader.className = "repo-card-header";
 
-    const repoName = document.createElement("h3");
-    repoName.textContent = repository.name;
+                const repoName = document.createElement("h3");
+                repoName.textContent = repository.name;
 
-    repoCardHeader.appendChild(repoName);
-    repoCard.appendChild(repoCardHeader);
+                repoCardHeader.appendChild(repoName);
+                repoCard.appendChild(repoCardHeader);
 
-    const repoCardBody = document.createElement("div");
-    repoCardBody.className = "repo-card-body";
-    repoCardBody.innerHTML = `
-        <p>${repository.description || "No description available."}</p>
-        <a href="${repository.html_url}" target="_blank"> <img src="/link.png" alt="User Image" class="link-icon" ></a>
-    `;
+                const repoCardBody = document.createElement("div");
+                repoCardBody.className = "repo-card-body";
+                repoCardBody.innerHTML = `
+                    <p>${repository.description || "No description available."}</p>
+                    <a href="${repository.html_url}" target="_blank"> <img src="/link.png" alt="User Image" class="link-icon" ></a>
+                `;
 
-    repoCard.appendChild(repoCardBody);
-    repositoriesContainer.appendChild(repoCard);
-});
-
-
-            // If there is a next page, recursively fetch the next page of repositories
-            if (hasNextPage) {
-                fetchRepositories(userName, page + 1);
-            }
+                repoCard.appendChild(repoCardBody);
+                repositoriesContainer.appendChild(repoCard);
+            });
         })
         .catch(error => console.error("Error fetching repositories:", error));
 }
+
