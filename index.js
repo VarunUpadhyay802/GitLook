@@ -72,7 +72,6 @@
 
 //     e.preventDefault();
 // });
-
 const GITHUB_API_USERINFO = "https://api.github.com/users/";
 
 const full_name = document.getElementById("full_name");
@@ -120,10 +119,22 @@ searchButton.addEventListener("click", (e) => {
 
     e.preventDefault();
 });
-
 function updatePaginationLinks(totalPages) {
     paginationContainer.innerHTML = ""; // Clear existing pagination links
 
+    // Add "Prev" button
+    const prevButton = document.createElement("a");
+    prevButton.href = "#";
+    prevButton.textContent = "Prev";
+    prevButton.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchRepositories(searchInput.value, currentPage);
+        }
+    });
+    paginationContainer.appendChild(prevButton);
+
+    // Add page number links
     for (let i = 1; i <= totalPages; i++) {
         const pageLink = document.createElement("a");
         pageLink.href = "#";
@@ -139,6 +150,18 @@ function updatePaginationLinks(totalPages) {
 
         paginationContainer.appendChild(pageLink);
     }
+
+    // Add "Next" button
+    const nextButton = document.createElement("a");
+    nextButton.href = "#";
+    nextButton.textContent = "Next";
+    nextButton.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            fetchRepositories(searchInput.value, currentPage);
+        }
+    });
+    paginationContainer.appendChild(nextButton);
 }
 
 function fetchRepositories(userName, page = 1) {
@@ -189,4 +212,3 @@ function getTotalPagesFromLinkHeader(linkHeader) {
     const match = linkHeader.match(/&page=(\d+)>; rel="last"/);
     return match ? parseInt(match[1]) : 1;
 }
-
