@@ -87,7 +87,8 @@ const repositoriesContainer = document.getElementById("repositoriesContainer");
 const need_to_search = document.getElementById("need_to_search");
 const loading = document.getElementById("loading");
 const paginationContainer = document.getElementById("paginationContainer");
-
+const Followers_count = document.getElementById("Followers_count")
+const Following_count = document.getElementById("Following_count")
 const reposPerPage = 10;
 let currentPage = 1;
 
@@ -105,6 +106,8 @@ searchButton.addEventListener("click", (e) => {
             need_to_search.style.display = "none";
 
             // Update HTML elements with user information
+            Following_count.textContent = data.following;
+            Followers_count.textContent = data.followers;
             full_name.textContent = data.name || "N/A";
             user_image.src = data.avatar_url || "default_user.jpg";
             user_email.textContent = data.email || "N/A";

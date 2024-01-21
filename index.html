@@ -19,9 +19,8 @@
                     <i class="fa fa-search"></i>
                 </button>
             </div>
+            <img src="icons8-loading-100.png" alt="" style="display: none;" id="loading">
 
-            <iframe src="https://giphy.com/embed/xTkcEQACH24SMPxIQg" width="480" height="480" frameBorder="0"
-                class="giphy-embed" style="display: none;" id="loading" allowFullScreen></iframe>
 
         </div>
         <div class="need_to_search" id="need_to_search">
@@ -36,14 +35,27 @@
                 <div class="user-image">
                     <img src="" alt="User Image" id="user_image">
                 </div>
-                <div class="user-info">
-                    <h2 id="full_name"></h2>
-                    <p>Email: <span id="user_email">N/A</span></p>
-                    <p>Bio: <span id="user_bio">N/A</span></p>
-                    <p>Twitter: <span id="twitter_username">N/A</span></p>
-                    <p>Following: <span id="Following_count"></span></p>
-                    <p>Follower: <span id="Follower_count"></span></p>
-                    <p><a href="#" id="github_link" target="_blank">Visit Profile</a></p>
+                <div class="user-info" style="display: flex; gap: 30px;">
+                    <div>
+                        <h2 id="full_name"></h2>
+                    </div>
+                    <div class="">
+                        <p>Bio: <span id="user_bio">N/A</span></p>
+
+                        <div>
+                            <p>Following: <span id="Following_count"></span></p>
+                            <p>Follower: <span id="Followers_count"></span></p>
+                        </div>
+                        <div>
+                            <p>Email: <span id="user_email">N/A</span></p>
+
+                            <p>Twitter: <span id="twitter_username">N/A</span></p>
+
+                            <div class="profile-link">
+                                <p><a href="#" id="github_link" target="_blank">Visit Profile</a></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="pagination" id="paginationContainer">

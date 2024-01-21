@@ -4,7 +4,10 @@ body {
   padding: 0;
   background-color: #f2f2f2;
 }
-
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
 .container {
   max-width: 1200px;
   margin: 20px auto;
@@ -19,6 +22,9 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  padding: 0 10px;
+  gap: 150px;
+  margin: 0 50px;
 }
 
 .user-image {
@@ -34,10 +40,6 @@ body {
   height: auto;
 }
 
-.user-info {
-  flex: 1;
-}
-
 .repositories {
   display: flex;
   margin: 80px 60px;
@@ -49,20 +51,23 @@ body {
   background-color: #7bd3ea;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: -13px;
+  margin-bottom: -85px;
   overflow: hidden;
-  height: 52vh;
+  height: 38vh;
   width: 32vw;
   max-width: 66vw;
-  padding: 18px;
+  padding: 10px 18px;
   transition: transform 0.3s, box-shadow 0.3s;
   color: white;
   opacity: 107%;
+  border: 2px solid #526d82;
+  border-radius: 12px;
 }
 
 .repo-card:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(136, 59, 59, 0.2);
+  background-color: #3a98b9;
 }
 
 .repo-card-header {
@@ -72,8 +77,31 @@ body {
   font-size: 1rem;
   display: flex;
   justify-content: space-around;
+  border: 3px solid #526d82;
+  border-radius: 12px;
+  transition: background-color 0.3s ease-in-out;
 }
 
+.repo-card-header:hover {
+  background-color: #f2f2f2; /* Change the background color on hover, adjust as needed */
+}
+.profile-link {
+  margin-top: 10px; /* Adjust the top margin as needed */
+}
+
+.profile-link a {
+  text-decoration: none;
+  background-color: #0366d6; /* GitHub's link color */
+  color: #ffffff; /* White text color */
+  padding: 8px 16px;
+  border-radius: 5px;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.profile-link a:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
 .repo-card-body {
   padding: 15px;
   display: flex;
