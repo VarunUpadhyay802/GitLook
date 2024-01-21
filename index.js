@@ -87,7 +87,7 @@ const resultDiv = document.getElementById("resultDiv");
 const repositoriesContainer = document.getElementById("repositoriesContainer");
 const need_to_search = document.getElementById("need_to_search");
 const loading = document.getElementById("loading");
-const paginationContainer = document.querySelector(".pagination");
+const paginationContainer = document.getElementById("paginationContainer");
 
 const reposPerPage = 10;
 let currentPage = 1;
@@ -121,53 +121,33 @@ searchButton.addEventListener("click", (e) => {
     e.preventDefault();
 });
 
-function updatePaginationLinks(linkHeader) {
+function updatePaginationLinks(totalPages) {
     paginationContainer.innerHTML = ""; // Clear existing pagination links
 
-    const links = parseLinkHeader(linkHeader);
-
-    // Create and append pagination links
-    links.forEach(link => {
+    for (let i = 1; i <= totalPages; i++) {
         const pageLink = document.createElement("a");
         pageLink.href = "#";
-        pageLink.textContent = link.page;
-        if (link.active) {
+        pageLink.textContent = i;
+        if (i === currentPage) {
             pageLink.classList.add("active");
         }
 
         pageLink.addEventListener("click", () => {
-            currentPage = link.page;
+            currentPage = i;
             fetchRepositories(searchInput.value, currentPage);
         });
 
         paginationContainer.appendChild(pageLink);
-    });
-}
-
-function parseLinkHeader(linkHeader) {
-    if (!linkHeader) {
-        return [];
     }
-
-    const links = linkHeader.split(", ");
-    const result = [];
-
-    links.forEach(link => {
-        const [url, rel] = link.split("; ");
-        const pageMatch = url.match(/page=(\d+)/);
-        const page = pageMatch ? parseInt(pageMatch[1]) : null;
-        const active = rel.includes("rel=\"next\"") || rel.includes("rel=\"prev\"") ? false : true;
-
-        result.push({ page, active });
-    });
-
-    return result;
 }
+
 function fetchRepositories(userName, page = 1) {
     fetch(`${GITHUB_API_USERINFO}${userName}/repos?page=${page}&per_page=${reposPerPage}`)
         .then(response => {
             const linkHeader = response.headers.get('link');
-            updatePaginationLinks(linkHeader);
+            const totalPages = getTotalPagesFromLinkHeader(linkHeader);
+
+            updatePaginationLinks(10);
 
             return response.json();
         })
@@ -190,14 +170,23 @@ function fetchRepositories(userName, page = 1) {
                 const repoCardBody = document.createElement("div");
                 repoCardBody.className = "repo-card-body";
                 repoCardBody.innerHTML = `
-                    <p>${repository.description || "No description available."}</p>
-                    <a href="${repository.html_url}" target="_blank"> <img src="/link.png" alt="User Image" class="link-icon" ></a>
-                `;
+                            <p>${repository.description || "No description available."}</p>
+                            <a href="${repository.html_url}" target="_blank"> <img src="/link.png" alt="User Image" class="link-icon" ></a>
+                        `;
 
                 repoCard.appendChild(repoCardBody);
                 repositoriesContainer.appendChild(repoCard);
             });
         })
         .catch(error => console.error("Error fetching repositories:", error));
+}
+
+function getTotalPagesFromLinkHeader(linkHeader) {
+    if (!linkHeader) {
+        return 1;
+    }
+
+    const match = linkHeader.match(/&page=(\d+)>; rel="last"/);
+    return match ? parseInt(match[1]) : 1;
 }
 
