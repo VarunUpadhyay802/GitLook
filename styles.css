@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f2f2f2;
@@ -40,31 +40,56 @@ body {
 
 .repositories {
   display: flex;
-  margin-top: 20px;
-  margin-left: 40px;
+  margin: 80px 60px;
   flex-wrap: wrap;
-  gap: 70px;
+  gap: 152px;
 }
 
 .repo-card {
-  background-color: #fff;
+  background-color: #7bd3ea;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
+  margin-bottom: -13px;
   overflow: hidden;
-  height: 60vh;
-  width: 28vw;
-  max-width: 24vw;
-  padding: 8px;
+  height: 52vh;
+  width: 32vw;
+  max-width: 66vw;
+  padding: 18px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: white;
+  opacity: 107%;
+}
+
+.repo-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .repo-card-header {
-  background-color: #f2f2f2;
-  padding: 10px;
+  background-color: white;
+  padding: 1px 18px;
+  color: #526d82;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-around;
 }
 
 .repo-card-body {
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.link-icon {
+  align-self: flex-end;
+  margin-top: 15px;
+  width: 29px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.link-icon:hover {
+  transform: scale(1.2); /* Increase the size on hover, adjust as needed */
 }
 
 @media (max-width: 768px) {
@@ -78,13 +103,7 @@ body {
   }
 }
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
-
-body {
-  background: #f2f2f2;
-  font-family: "Open Sans", sans-serif;
-}
-
+/* Original styling for the search container */
 .search {
   width: 100%;
   position: relative;
@@ -117,8 +136,10 @@ body {
   cursor: pointer;
   font-size: 20px;
 }
+.searchButton:hover {
+  background-color: #0099b0;
+}
 
-/*Resize the wrap to see the search bar change!*/
 .wrap {
   width: 30%;
   position: absolute;
@@ -126,9 +147,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.link-icon {
-  width: 8%;
-}
+
 .pagination {
   display: flex;
   list-style: none;
@@ -140,13 +159,16 @@ body {
   color: black;
   text-decoration: none;
   padding: 8px 16px;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
   cursor: pointer;
+  border: 1px solid #ddd;
+  margin-right: 5px;
 }
 
 .pagination a.active {
   background-color: dodgerblue;
   color: white;
+  border: 1px solid dodgerblue;
 }
 
 .pagination a:hover:not(.active) {

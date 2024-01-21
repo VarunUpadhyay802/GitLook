@@ -119,13 +119,15 @@ searchButton.addEventListener("click", (e) => {
 
     e.preventDefault();
 });
+// ... (your existing code)
+
 function updatePaginationLinks(totalPages) {
     paginationContainer.innerHTML = ""; // Clear existing pagination links
 
-    // Add "Prev" button
+    // Add "Prev" button with left arrow
     const prevButton = document.createElement("a");
     prevButton.href = "#";
-    prevButton.textContent = "Prev";
+    prevButton.innerHTML = '&laquo;'; // Left arrow symbol
     prevButton.addEventListener("click", () => {
         if (currentPage > 1) {
             currentPage--;
@@ -151,10 +153,10 @@ function updatePaginationLinks(totalPages) {
         paginationContainer.appendChild(pageLink);
     }
 
-    // Add "Next" button
+    // Add "Next" button with right arrow
     const nextButton = document.createElement("a");
     nextButton.href = "#";
-    nextButton.textContent = "Next";
+    nextButton.innerHTML = '&raquo;'; // Right arrow symbol
     nextButton.addEventListener("click", () => {
         if (currentPage < totalPages) {
             currentPage++;
@@ -164,13 +166,15 @@ function updatePaginationLinks(totalPages) {
     paginationContainer.appendChild(nextButton);
 }
 
+// ... (your existing code)
+
 function fetchRepositories(userName, page = 1) {
     fetch(`${GITHUB_API_USERINFO}${userName}/repos?page=${page}&per_page=${reposPerPage}`)
         .then(response => {
             const linkHeader = response.headers.get('link');
             const totalPages = getTotalPagesFromLinkHeader(linkHeader);
 
-            updatePaginationLinks(10);
+            updatePaginationLinks(5);
 
             return response.json();
         })
@@ -185,18 +189,27 @@ function fetchRepositories(userName, page = 1) {
                 repoCardHeader.className = "repo-card-header";
 
                 const repoName = document.createElement("h3");
+                const repoLink = document.createElement("a");
+                repoLink.href = repository.html_url;
+                repoLink.target = "_blank";
+                repoLink.innerHTML = '<img src="/link.png" alt="Link Icon" class="link-icon">';
+
                 repoName.textContent = repository.name;
 
                 repoCardHeader.appendChild(repoName);
+                repoCardHeader.appendChild(repoLink);
                 repoCard.appendChild(repoCardHeader);
 
                 const repoCardBody = document.createElement("div");
                 repoCardBody.className = "repo-card-body";
                 repoCardBody.innerHTML = `
-                            <p>${repository.description || "No description available."}</p>
-                            <a href="${repository.html_url}" target="_blank"> <img src="/link.png" alt="User Image" class="link-icon" ></a>
-                        `;
-
+                <p>${repository.description || "No description available."}</p>
+               
+                <ul>
+                    <li><strong>Allow Forking:</strong> ${repository.allow_forking || "N/A"}</li>
+                    <li><strong>Languages:</strong> ${repository.language || "N/A"}</li>
+                </ul>
+            `;
                 repoCard.appendChild(repoCardBody);
                 repositoriesContainer.appendChild(repoCard);
             });
